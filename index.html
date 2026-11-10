@@ -683,6 +683,17 @@ function toggleFaq(btn){
   }
 }
 
+/* Evento InitiateCheckout para o GTM/Meta quando clicam em qualquer CTA de compra */
+document.querySelectorAll(".js-checkout").forEach(a => {
+  a.addEventListener("click", () => {
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+      event: "initiateCheckout",
+      ecommerce: { value: 19.90, currency: "USD" }
+    });
+  });
+});
+
 /* CTA flutuante */
 const floatBtn = document.getElementById("ctaFloat");
 window.addEventListener("scroll", () => {
