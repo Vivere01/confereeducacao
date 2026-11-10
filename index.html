@@ -93,6 +93,7 @@ header.nav{position:sticky;top:0;z-index:800;background:rgba(251,250,255,.88);ba
 .shot-bar i:nth-child(2){background:#FFD46B}
 .shot-bar i:nth-child(3){background:#8BE3AC}
 .shot-frame img{border-radius:16px 16px 0 0;width:100%;aspect-ratio:16/9.6;object-fit:cover}
+.shot-frame video{display:block;width:100%;border-radius:16px 16px 0 0;aspect-ratio:16/9.6;object-fit:cover;background:#17113A}
 .float-badge{position:absolute;top:-18px;right:4%;display:inline-flex;align-items:center;gap:10px;background:var(--purple);color:#fff;font-weight:800;font-size:1rem;padding:13px 24px;border-radius:99px;box-shadow:0 14px 30px -10px rgba(91,77,224,.6)}
 .float-badge .play{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:#fff;color:var(--purple);flex-shrink:0}
 .float-badge .play svg{width:13px;height:13px;margin-left:2px}
@@ -347,7 +348,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <div class="float-badge"><span class="play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>Incluye videos paso a paso</div>
       <div class="shot-frame">
         <div class="shot-bar"><i></i><i></i><i></i></div>
-        <img src="https://images.pexels.com/photos/8294797/pexels-photo-8294797.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Niños armando un robot en la sala de la casa" loading="eager">
+        <video src="/hero-video.mp4" autoplay muted loop playsinline preload="auto" poster="https://images.pexels.com/photos/8294797/pexels-photo-8294797.jpeg?auto=compress&cs=tinysrgb&w=1200" aria-label="Video del programa de robótica para niños"></video>
       </div>
     </div>
   </div>
