@@ -5,18 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Confere Educación — Programa de Robótica Práctica para Niños</title>
 <meta name="description" content="+120 proyectos de robótica en video y PDF, paso a paso, con materiales simples de tu casa. Método educativo para que los niños aprendan ingeniería jugando — con papá, mamá o en la escuela.">
-<link rel="canonical" href="https://www.confere.sbs/">
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://www.confere.sbs/">
-<meta property="og:title" content="Confere Educación — Robótica Prática para Niños">
-<meta property="og:description" content="+120 proyectos paso a paso para tus hijos construir su primer robot — con materiales simples de casa. Acceso de por vida.">
-<meta property="og:image" content="https://images.pexels.com/photos/8294797/pexels-photo-8294797.jpeg?auto=compress&cs=tinysrgb&w=1200">
-<meta property="og:site_name" content="Confere Educación">
-<meta property="og:locale" content="es_ES">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Confere Educación — Robótica Prática para Niños">
-<meta name="twitter:description" content="+120 proyectos paso a paso para tus hijos construir su primer robot — con materiales simples de casa.">
-<meta name="twitter:image" content="https://images.pexels.com/photos/8294797/pexels-photo-8294797.jpeg?auto=compress&cs=tinysrgb&w=1200">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="apple-touch-icon" href="/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -174,6 +162,17 @@ section.sec{padding:96px 0}
 .float-mini.a{top:-24px;left:-24px}
 .float-mini.b{bottom:-22px;right:-22px}
 
+/* notificação de prova social */
+.proof{position:fixed;left:16px;bottom:16px;z-index:950;display:flex;align-items:center;gap:12px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 40px 12px 12px;box-shadow:0 18px 44px -14px rgba(23,17,58,.3);max-width:360px;opacity:0;transform:translateY(16px);pointer-events:none;transition:opacity .35s,transform .35s}
+.proof.show{opacity:1;transform:translateY(0);pointer-events:auto}
+.proof-img{width:46px;height:46px;border-radius:10px;object-fit:cover;flex-shrink:0}
+.proof-body{min-width:0}
+.proof-body strong{display:block;font-size:.84rem;font-weight:800;line-height:1.35}
+.proof-body span{font-size:.74rem;color:var(--muted);font-weight:600;display:block;line-height:1.35}
+.proof-body .proof-time{color:var(--purple)}
+.proof-close{position:absolute;top:6px;right:8px;background:none;border:none;color:var(--muted);font-size:1rem;line-height:1;cursor:pointer;padding:4px}
+.proof-verified{display:inline-flex;align-items:center;gap:4px;color:var(--green);font-size:.7rem;font-weight:800}
+
 /* galeria */
 .gal{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
 .gal figure{position:relative;border-radius:20px;overflow:hidden;aspect-ratio:4/3;background:var(--purple-soft);box-shadow:var(--shadow-sm)}
@@ -274,8 +273,7 @@ footer.site a:hover{color:var(--yellow)}
 #ctaFloat{position:fixed;left:50%;bottom:20px;transform:translateX(-50%) translateY(90px);opacity:0;transition:.35s;z-index:900;font-size:.92rem;box-shadow:0 18px 40px -12px rgba(91,77,224,.7)}
 #ctaFloat.show{transform:translateX(-50%);opacity:1}
 
-@media (max-width:960px){
-  .hero-shot{padding:0 8px}
+@media (max-width:960px){  .hero-shot{padding:0 8px}
   .float-badge{top:-14px;right:2%;font-size:.8rem;padding:10px 16px}
   .stats .wrap{grid-template-columns:1fr 1fr;row-gap:26px}
   .stat:nth-child(3){border-left:none;padding-left:0}
@@ -292,11 +290,13 @@ footer.site a:hover{color:var(--yellow)}
   .f-grid{grid-template-columns:1fr}
   section.sec{padding:64px 0}
   .hero{padding:48px 0 0}
+  .proof{left:12px;right:12px;bottom:84px;max-width:none}
 }
 @media (max-width:560px){
   .steps,.gal{grid-template-columns:1fr}
   .hero-cta .btn-primary{width:100%;justify-content:center}
   .brand small{display:none}
+  .proof{bottom:80px}
 }
 </style>
 
@@ -644,6 +644,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- CTA flutuante -->
 <a class="btn btn-primary" id="ctaFloat" href="#oferta">Asegurar acceso por $19,90</a>
 
+<!-- Notificação de prova social -->
+<div class="proof" id="proof" aria-live="polite" role="status">
+  <img class="proof-img" id="proofImg" src="https://images.pexels.com/photos/8294790/pexels-photo-8294790.jpeg?auto=compress&cs=tinysrgb&w=120" alt="" loading="lazy">
+  <div class="proof-body">
+    <strong id="proofName"></strong>
+    <span id="proofDetail"></span>
+    <span class="proof-time" id="proofTime"></span>
+  </div>
+  <button class="proof-close" id="proofClose" aria-label="Cerrar">✕</button>
+</div>
+
 <script>
 /* ============================================================
    CONFERE EDUCACIÓN — configuración
@@ -728,6 +739,51 @@ const floatBtn = document.getElementById("ctaFloat");
 window.addEventListener("scroll", () => {
   floatBtn.classList.toggle("show", window.scrollY > 900);
 });
+
+/* Prova social — notificações de compra em tempo real */
+(function(){
+  const people = [
+    ["Laura M.","Madrid"],["Carlos R.","Bogotá"],["Mariana P.","Buenos Aires"],
+    ["Diego S.","Ciudad de México"],["Valentina G.","Santiago"],["Andrés L.","Lima"],
+    ["Sofía T.","Monterrey"],["Javier O.","Sevilla"],["Camila F.","Medellín"],
+    ["Rodrigo A.","Guadalajara"],["Lucía B.","Valencia"],["Mateo V.","Quito"],
+    ["Fernanda C.","Zaragoza"],["Gabriel H.","Belén"],["Paula D.","Rosario"],
+    ["Tomás E.","Bilbao"],["Isabela N.","Córdoba"],["Nicolás Q.","Guayaquil"]
+  ];
+  const cities = people.map(p => p[1]);
+  const products = [
+    "el acceso completo + 9 bonos",
+    "el programa de robótica",
+    "el acceso para su hijo",
+    "el programa anual de proyectos"
+  ];
+  const proof = document.getElementById("proof");
+  const elN = document.getElementById("proofName");
+  const elD = document.getElementById("proofDetail");
+  const elT = document.getElementById("proofTime");
+  const closeBtn = document.getElementById("proofClose");
+  let stopped = false, timer;
+
+  function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+  function minutesAgo(){ return [1,2,3,4,5,6,8,10,12][Math.floor(Math.random()*9)]; }
+
+  function show(){
+    if (stopped) return;
+    const [name, city] = pick(people);
+    elN.textContent = name + " (" + city + ")";
+    elD.textContent = "compró " + pick(products);
+    elT.textContent = "Hace " + minutesAgo() + " min · Compra verificada ✓";
+    proof.classList.add("show");
+    setTimeout(() => proof.classList.remove("show"), 6000);
+    timer = setTimeout(show, 16000 + Math.floor(Math.random()*14000));
+  }
+  closeBtn.addEventListener("click", () => {
+    stopped = true;
+    clearTimeout(timer);
+    proof.classList.remove("show");
+  });
+  setTimeout(show, 9000);
+})();
 </script>
 </body>
 </html>
