@@ -683,6 +683,23 @@ function toggleFaq(btn){
   }
 }
 
+/* Repassa UTMs + click IDs da landing para o checkout (Cakto registra na venda) */
+const TRACK_KEYS = ["utm_source","utm_medium","utm_campaign","utm_adset","utm_content","utm_term","utm_placement","utm_id","fbclid","gclid","src","sck"];
+const incoming = new URLSearchParams(window.location.search);
+const forward = new URLSearchParams();
+TRACK_KEYS.forEach(k => {
+  const v = incoming.get(k);
+  if (v) forward.set(k, v);
+});
+const forwardQs = forward.toString();
+
+document.querySelectorAll(".js-checkout").forEach(a => {
+  const base = a.getAttribute("href");
+  if (forwardQs && /^https?:\/\//.test(base)) {
+    a.setAttribute("href", base + (base.includes("?") ? "&" : "?") + forwardQs);
+  }
+});
+
 /* Evento InitiateCheckout para o GTM/Meta quando clicam em qualquer CTA de compra */
 document.querySelectorAll(".js-checkout").forEach(a => {
   a.addEventListener("click", () => {
